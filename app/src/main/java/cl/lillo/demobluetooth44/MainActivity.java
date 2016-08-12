@@ -9,17 +9,22 @@ import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
@@ -29,6 +34,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
@@ -66,7 +72,9 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //scanner
+        seleccionarMac();
+
+        //scanner qr
         scannerButton = (Button) findViewById(R.id.scannerButton);
         scannerButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,15 +84,15 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
-        //fin scanner
+        //fin scanner qr
 
         //TABS
         Resources res = getResources();
 
-        TabHost tabs=(TabHost)findViewById(R.id.tabHost);
+        TabHost tabs = (TabHost) findViewById(R.id.tabHost);
         tabs.setup();
 
-        TabHost.TabSpec spec=tabs.newTabSpec("mitab1");
+        TabHost.TabSpec spec = tabs.newTabSpec("mitab1");
         spec.setContent(R.id.linearLayout);
         spec.setIndicator("", res.getDrawable(R.drawable.weight));
         tabs.addTab(spec);
@@ -168,9 +176,57 @@ public class MainActivity extends Activity {
         checkBTState();
     }
 
-    //scanner
+    public void seleccionarMac() {
+        AlertDialog.Builder alertEliminarPlanta = new AlertDialog.Builder(this);
+        alertEliminarPlanta.setTitle("Seleccionar Pesa");
+        alertEliminarPlanta.setMessage("Seleccione la pesa a utilizar, asegurese de que la pesa esté vinculada.");
+        final Spinner listaPesas = new Spinner(this);
+        List<String> spinnerArray = new ArrayList<String>();
+        spinnerArray.add("Pesa 17");
+        spinnerArray.add("Pesa 26");
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, spinnerArray);
+        listaPesas.setAdapter(adapter);
+        alertEliminarPlanta.setView(listaPesas);
+        alertEliminarPlanta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String pesa = listaPesas.getSelectedItem().toString();
+                if (pesa.equals("Pesa 17"))
+                    address = "98:D3:31:20:73:87";
+                if (pesa.equals("Pesa 26"))
+                    address = "98:D3:31:30:69:E9";
+            }
+        });
 
-    //fin scanner
+        alertEliminarPlanta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        alertEliminarPlanta.show();
+    }
+
+    //retorna mac de dispositivo opr el nombre
+    public static String getBluetoothMacAddress() {
+        final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        // if device does not support Bluetooth
+        if (mBluetoothAdapter == null) {
+            Log.d(TAG, "device does not support bluetooth");
+            return null;
+        }
+
+        String mac = "";
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        for (BluetoothDevice device : pairedDevices) {
+            // here you get the mac using device.getAddress()
+            if (device.getName().toString().startsWith("HUBCROP")) {
+                mac = device.getAddress();
+            }
+        }
+        //return mBluetoothAdapter.getAddress();
+        return mac;
+    }
 
     public int converter(int libra) {
         if (libra >= 16 && libra <= 25) {
@@ -204,26 +260,6 @@ public class MainActivity extends Activity {
         return libra;
     }
 
-    public static String getBluetoothMacAddress() {
-        final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        // if device does not support Bluetooth
-        if (mBluetoothAdapter == null) {
-            Log.d(TAG, "device does not support bluetooth");
-            return null;
-        }
-
-        String mac = "";
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        for (BluetoothDevice device : pairedDevices) {
-            // here you get the mac using device.getAddress()
-            if (device.getName().toString().startsWith("HUBCROP")) {
-                mac = device.getAddress();
-            }
-        }
-
-        //return mBluetoothAdapter.getAddress();
-        return mac;
-    }
 
     private BluetoothSocket createBluetoothSocket(BluetoothDevice device) throws IOException {
         if (Build.VERSION.SDK_INT >= 10) {
