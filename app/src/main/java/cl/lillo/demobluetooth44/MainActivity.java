@@ -207,7 +207,7 @@ public class MainActivity extends Activity {
         alertEliminarPlanta.show();
     }
 
-    //retorna mac de dispositivo por el nombre
+    //retorna mac de dispositivo por el nombre.
     public static String getBluetoothMacAddress() {
         final BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         // if device does not support Bluetooth
