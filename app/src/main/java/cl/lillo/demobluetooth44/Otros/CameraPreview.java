@@ -1,4 +1,4 @@
-package cl.lillo.demobluetooth44;
+package cl.lillo.demobluetooth44.Otros;
 
 import android.content.Context;
 import android.hardware.Camera;

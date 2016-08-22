@@ -1,8 +1,6 @@
-package cl.lillo.demobluetooth44;
+package cl.lillo.demobluetooth44.Otros;
 
-import android.app.Application;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.hardware.Camera;
 import android.media.MediaPlayer;
@@ -15,8 +13,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import net.sourceforge.zbar.Config;
 import net.sourceforge.zbar.Image;
@@ -26,9 +22,9 @@ import net.sourceforge.zbar.SymbolSet;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
-import java.util.StringTokenizer;
+
+import cl.lillo.demobluetooth44.R;
 
 /**
  * Created by kvprasad on 10/3/2015.

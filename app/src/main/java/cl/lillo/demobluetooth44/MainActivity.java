@@ -1,32 +1,23 @@
 package cl.lillo.demobluetooth44;
 
 import android.app.Activity;
-import android.bluetooth.BluetoothA2dp;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothManager;
-import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TabHost;
-import android.widget.TabWidget;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +31,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import cl.lillo.demobluetooth44.Otros.BarcodeScanner;
+
 //import com.example.bluetooth2.R;
 
 public class MainActivity extends Activity {
@@ -47,6 +40,7 @@ public class MainActivity extends Activity {
 
     TextView txtKL, txtLB;
     Handler h;
+    EditText txtRut;
 
     final int RECIEVE_MESSAGE = 1;        // Status  for Handler
     private BluetoothAdapter btAdapter = null;
@@ -117,6 +111,7 @@ public class MainActivity extends Activity {
 
         txtKL = (TextView) findViewById(R.id.txtPesoKL);
         txtLB = (TextView) findViewById(R.id.txtPesoLB);
+        txtRut = (EditText) findViewById(R.id.txtRut);
 
         mac = getBluetoothMacAddress();
         //txtLB.setText(mac);
@@ -177,17 +172,17 @@ public class MainActivity extends Activity {
     }
 
     public void seleccionarMac() {
-        AlertDialog.Builder alertEliminarPlanta = new AlertDialog.Builder(this);
-        alertEliminarPlanta.setTitle("Seleccionar Pesa");
-        alertEliminarPlanta.setMessage("Seleccione la pesa a utilizar, asegurese de que la pesa esté vinculada.");
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Seleccionar Pesa");
+        alert.setMessage("Seleccione la pesa a utilizar, asegurese de que la pesa esté vinculada.");
         final Spinner listaPesas = new Spinner(this);
         List<String> spinnerArray = new ArrayList<String>();
         spinnerArray.add("Pesa 17");
         spinnerArray.add("Pesa 26");
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, spinnerArray);
         listaPesas.setAdapter(adapter);
-        alertEliminarPlanta.setView(listaPesas);
-        alertEliminarPlanta.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        alert.setView(listaPesas);
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String pesa = listaPesas.getSelectedItem().toString();
@@ -198,13 +193,13 @@ public class MainActivity extends Activity {
             }
         });
 
-        alertEliminarPlanta.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+        alert.setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
             }
         });
-        alertEliminarPlanta.show();
+        alert.show();
     }
 
     //retorna mac de dispositivo por el nombre.
@@ -280,7 +275,6 @@ public class MainActivity extends Activity {
 
         // Set up a pointer to the remote node using it's address.
         BluetoothDevice device = btAdapter.getRemoteDevice(address);
-
         // Two things are needed to make a connection:
         //   A MAC address, which we got above.
         //   A Service ID or UUID.  In this case we are using the
@@ -396,5 +390,63 @@ public class MainActivity extends Activity {
                 Log.d(TAG, "...Error data send: " + e.getMessage() + "...");
             }
         }
+    }
+
+    public void tecla1(View view) {
+        txtRut.setText(txtRut.getText().toString() + "1");
+    }
+
+    public void tecla2(View view) {
+        txtRut.setText(txtRut.getText().toString() + "2");
+    }
+
+    public void tecla3(View view) {
+        txtRut.setText(txtRut.getText().toString() + "3");
+    }
+
+    public void tecla4(View view) {
+        txtRut.setText(txtRut.getText().toString() + "4");
+    }
+
+    public void tecla5(View view) {
+        txtRut.setText(txtRut.getText().toString() + "5");
+    }
+
+    public void tecla6(View view) {
+        txtRut.setText(txtRut.getText().toString() + "6");
+    }
+
+    public void tecla7(View view) {
+        txtRut.setText(txtRut.getText().toString() + "7");
+    }
+
+    public void tecla8(View view) {
+        txtRut.setText(txtRut.getText().toString() + "8");
+    }
+
+    public void tecla9(View view) {
+        txtRut.setText(txtRut.getText().toString() + "9");
+    }
+
+    public void tecla0(View view) {
+        txtRut.setText(txtRut.getText().toString() + "0");
+    }
+
+    public void teclaguion(View view) {
+        txtRut.setText(txtRut.getText().toString() + "-");
+    }
+
+    public void teclak(View view) {
+        txtRut.setText(txtRut.getText().toString() + "K");
+    }
+
+    public void teclaborrar(View view) {
+        String cadena = txtRut.getText().toString();
+        if (!cadena.equals(""))
+            txtRut.setText(cadena.substring(0, cadena.length() - 1));
+    }
+
+    public void teclaborrarAll(View view) {
+        txtRut.setText("");
     }
 }
