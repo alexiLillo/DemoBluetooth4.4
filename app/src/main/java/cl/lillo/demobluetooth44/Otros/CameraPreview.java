@@ -7,6 +7,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import java.io.IOException;
+import java.security.Policy;
 
 
 public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
@@ -90,11 +91,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        if (null != mCamera) {
-            //mCamera.stopPreview();
-            //mCamera.release();
-            //mCamera = null;
-        }
+
     }
+
 
 }

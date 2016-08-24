@@ -207,4 +207,17 @@ public class BarcodeScanner extends AppCompatActivity {
         previewing = false;
         mPreview.getHolder().removeCallback(mPreview);
     }
+
+    //IMPORTANTE
+    @Override
+    protected void onPause() {
+        super.onPause();
+        releaseCamera();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCameraInstance();
+    }
 }
